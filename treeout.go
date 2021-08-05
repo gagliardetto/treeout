@@ -19,15 +19,17 @@ const (
 type Tree struct {
 	Docs     []string
 	branches []Branches
-	isRoot   bool
-	level    int
-	parent   Branches
-	prefix   string
-	index    int
+
+	isRoot bool
+	level  int
+	parent Branches
+	index  int
+	prefix string
 }
 
 type Branches interface {
 	Child(...string) Branches
+	Add(Branches)
 	String() string
 
 	padding() string
@@ -36,6 +38,11 @@ type Branches interface {
 	setPrefix(string)
 	getPrefix() string
 	selfIndex() int
+
+	setBranches([]Branches)
+	setLevel(level int)
+	setParent(parent Branches)
+	setIndex(index int)
 }
 
 func New(docs ...string) *Tree {
@@ -108,6 +115,25 @@ func (t *Tree) Child(docs ...string) Branches {
 
 	t.branches = append(t.branches, newT)
 	return newT
+}
+
+func (t *Tree) Add(children Branches) {
+	children.setParent(t)
+	children.setIndex(len(t.children()))
+	t.branches = append(t.branches, children)
+}
+
+func (t *Tree) setBranches(branches []Branches) {
+	t.branches = branches
+}
+func (t *Tree) setLevel(level int) {
+	t.level = level
+}
+func (t *Tree) setParent(parent Branches) {
+	t.parent = parent
+}
+func (t *Tree) setIndex(index int) {
+	t.index = index
 }
 
 func formatArr(arr []Branches) string {
