@@ -30,6 +30,7 @@ type Tree struct {
 type Branches interface {
 	Child(...string) Branches
 	Add(Branches)
+	ParentFunc(fn func(Branches))
 	String() string
 
 	padding() string
