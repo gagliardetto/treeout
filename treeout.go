@@ -119,8 +119,7 @@ func (t *Tree) Child(docs ...string) Branches {
 }
 
 func (t *Tree) ParentFunc(fn func(Branches)) {
-	parent := t.branches[len(t.branches)-1]
-	fn(parent)
+	fn(t)
 }
 
 func (t *Tree) Add(children Branches) {

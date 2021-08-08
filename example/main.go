@@ -21,7 +21,9 @@ func main() {
 	t3.Child("err:", "something happened")
 	t.Child("dep4").Child("child").Child("child").Child("child")
 
-	t.Child("dep5").Child("child")
+	t.Child("dep5").Child("child").ParentFunc(func(b treeout.Branches) {
+		b.Child("aaaa")
+	})
 
 	fmt.Println(t)
 }
