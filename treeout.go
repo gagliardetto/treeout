@@ -17,7 +17,7 @@ const (
 )
 
 type Tree struct {
-	Docs     string
+	Doc      string
 	branches []Branches
 
 	isRoot bool
@@ -46,9 +46,9 @@ type Branches interface {
 	setIndex(index int)
 }
 
-func New(docs string) *Tree {
+func New(doc string) *Tree {
 	return &Tree{
-		Docs:   docs,
+		Doc:    doc,
 		isRoot: true,
 		level:  0,
 	}
@@ -67,7 +67,7 @@ func (t *Tree) selfIndex() int {
 
 func (t Tree) String() string {
 	if t.isRoot {
-		return foreachLine(t.Docs, func(total int, i int, s string) string {
+		return foreachLine(t.Doc, func(total int, i int, s string) string {
 			base := t.padding() + s
 			if i == total-1 {
 				return base
@@ -75,7 +75,7 @@ func (t Tree) String() string {
 			return base + "\n"
 		}) + "\n" + formatArr(t.branches)
 	}
-	return t.branchLn(t.Docs) + formatArr(t.branches)
+	return t.branchLn(t.Doc) + formatArr(t.branches)
 }
 
 type sf func(int, int, string) string
@@ -97,9 +97,9 @@ func (t *Tree) padding() string {
 	return padding
 }
 
-func (t *Tree) branchLn(docs string) string {
+func (t *Tree) branchLn(doc string) string {
 	if t.selfIndex() < len(t.prnt().children())-1 {
-		return foreachLine(docs, func(total int, i int, s string) string {
+		return foreachLine(doc, func(total int, i int, s string) string {
 			var base string
 			if i == 0 {
 				base = strings.TrimSuffix(t.getPrefix(), BranchChainerBox) + BranchSplitterBox + s
@@ -112,10 +112,10 @@ func (t *Tree) branchLn(docs string) string {
 			return base + "\n"
 		}) + "\n"
 		// return strings.TrimSuffix(t.getPrefix(), BranchChainerBox) + BranchSplitterBox +
-		// 	docs + "\n"
+		// 	doc + "\n"
 	}
 	if t.selfIndex() == len(t.prnt().children())-1 {
-		return foreachLine(docs, func(total int, i int, s string) string {
+		return foreachLine(doc, func(total int, i int, s string) string {
 			var base string
 			if i == 0 {
 				base = strings.TrimSuffix(t.getPrefix(), BranchChainerBox) + BranchDelimiterBox + s
@@ -128,9 +128,9 @@ func (t *Tree) branchLn(docs string) string {
 			return base + "\n"
 		}) + "\n"
 		// return strings.TrimSuffix(t.getPrefix(), BranchChainerBox) + BranchDelimiterBox +
-		// 	docs + "\n"
+		// 	doc + "\n"
 	}
-	return foreachLine(docs, func(total int, i int, s string) string {
+	return foreachLine(doc, func(total int, i int, s string) string {
 		var base string
 		if i == 0 {
 			base = strings.TrimSuffix(t.getPrefix(), BranchChainerBox) + BranchDelimiterBox + s
@@ -143,7 +143,7 @@ func (t *Tree) branchLn(docs string) string {
 		return base + "\n"
 	}) + "\n"
 	// return strings.TrimSuffix(t.getPrefix(), BranchChainerBox) + BranchDelimiterBox +
-	// 	docs + "\n"
+	// 	doc + "\n"
 }
 
 func (t *Tree) children() []Branches {
@@ -154,9 +154,9 @@ func (t *Tree) prnt() Branches {
 	return t.parent
 }
 
-func (t *Tree) Child(docs string) Branches {
+func (t *Tree) Child(doc string) Branches {
 	newT := &Tree{
-		Docs:   docs,
+		Doc:    doc,
 		level:  t.level + 1,
 		parent: t,
 		index:  len(t.children()),
