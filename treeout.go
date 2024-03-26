@@ -30,6 +30,9 @@ type Tree struct {
 type Branches interface {
 	Child(string) Branches
 	Add(Branches)
+	GetChildrenByDoc(string) []Branches
+	GetAllChildren() []Branches
+	getDoc() string
 	ParentFunc(fn func(Branches))
 	String() string
 
@@ -174,6 +177,24 @@ func (t *Tree) Add(children Branches) {
 	children.setParent(t)
 	children.setIndex(len(t.children()))
 	t.branches = append(t.branches, children)
+}
+
+func (t *Tree) GetChildrenByDoc(doc string) []Branches {
+	var children []Branches
+	for _, v := range t.children() {
+		if v.getDoc() == doc {
+			children = append(children, v)
+		}
+	}
+	return children
+}
+
+func (t *Tree) GetAllChildren() []Branches {
+	return t.children()
+}
+
+func (t *Tree) getDoc() string {
+	return t.Doc
 }
 
 func (t *Tree) setBranches(branches []Branches) {
